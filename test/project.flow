@@ -1,0 +1,27 @@
+{
+
+  project : {
+    name : 'rainbow test',
+    version : '1.0.0',
+    author : 'caribou',
+
+    app : {
+      name : 'luxe_empty',
+      package : ''
+    },
+
+    build : {
+      defines : [],
+      dependencies : {
+        luxe : '*',
+        rainbow : '*'
+      }
+    },
+
+    files : {
+      assets : 'assets/'
+    }
+
+  }
+
+}
