@@ -10,7 +10,7 @@ class Main extends luxe.Game {
     override function ready() {
         new RichText
         ({
-            text : "Hel{red}lo {white}wor{red}ld",
+            text : "Hel{red}lo {white}w{red}or{b}ld",
             pos : Luxe.screen.mid,
             color : new Color().rgb(0x276BE8),  // Default color
             tags : [new Tag("red", new Color().rgb(0xE8273C)),

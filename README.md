@@ -1,3 +1,3 @@
-# luxe-richtext-dummyname
+# Rainbow
 
-Text coloring per character for luxe. Different font is not supported yet.
+Text coloring/sizing per character for luxe. Different font is not supported yet.

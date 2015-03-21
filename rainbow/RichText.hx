@@ -29,7 +29,7 @@ class Tag {
 }
 
 
-typedef TagData = {pos:Int, len:Int, color:Color, text:String};
+typedef TagData = {pos:Int, len:Int, color:Color, size:Float, text:String};
 class RichText {
     public var text_options : Dynamic;
     var text_chunks : Array<Text> = new Array();
@@ -89,7 +89,7 @@ class RichText {
 
         // return chunk.font.get_text_dimensions(chunk.text, scale_cache);
 
-        return chunk.font.width_of(chunk.text, size) / 1.2;  // WORKAROUND / 1.2
+        return chunk.font.width_of(chunk.text, size) / 1.2;  // AWFUL WORKAROUND / 1.2
     }
 
     public function set_visible(visibility:Bool)
@@ -146,9 +146,11 @@ class RichText {
 
             var m = r.matchedPos();
 
+            var tagName = r.matched(1);
+
+            // TAG COLORS
             for(tag in tags)
             {
-                var tagName = r.matched(1);
                 if(tag.text == tagName)
                 {
                     reg_text = r.matchedRight();
@@ -162,6 +164,18 @@ class RichText {
                 }
             }
 
+            // TAG BOLD (REFACTOR)
+            if(tagName == "b")
+            {
+                reg_text = r.matchedRight();
+                dpos += m.len;
+                m.pos = new_text.length - reg_text.length - dpos;
+                var tag_data:TagData = cast m;
+                tag_data.size = size * 1.20;
+                tag_data.text = "b";
+                tag_datas.push(tag_data);
+            }
+
         }
 
         // REMOVE TAG FROM TEXT
@@ -169,6 +183,7 @@ class RichText {
         for(tag in tags) {
             clean_text = clean_text.replace("{" + tag.text + "}", "");
         }
+        clean_text = clean_text.replace("{b}", "");
 
         // POOL OLD CHUNKS
         for(chunk in text_chunks)
@@ -205,6 +220,7 @@ class RichText {
                     pos : pos,
                     point_size : size,
                     batcher : batcher,
+                    align_vertical : center,
                 });
             }
 
@@ -220,7 +236,9 @@ class RichText {
         while(tag_i-- > 0) {
             var tag_data = tag_datas[tag_i];
             for(j in tag_data.pos...i) {
-                text_chunks[j].color = tag_data.color;
+                if(tag_data.color != null) text_chunks[j].color = tag_data.color;
+                if(tag_data.size != null)
+                    text_chunks[j].point_size = tag_data.size;
             }
             i = tag_data.pos;
         }
